@@ -225,7 +225,7 @@ public class BattleManager : MonoBehaviour
     void SetWinPanel()
     {
         InGameManager gm = GetComponent<InGameManager>();
-        Lv_Text.text = gm.Lv.ToString();
+        Lv_Text.text ="Lv." + gm.Lv;
         EXP_Text.text = gm.Cur_Exp + "/" + gm.Max_Exp;
         EXP_Bar.fillAmount = gm.Cur_Exp / gm.Max_Exp;
         RectTransform panelts = WinPanel.GetComponent<RectTransform>();
@@ -235,6 +235,39 @@ public class BattleManager : MonoBehaviour
         panelts.DOMove(new Vector3(0, 0, 0), 0.5f);
         
     }
+
+    void ExpUp(int exp)
+    {
+        InGameManager gm = GetComponent<InGameManager>();
+        int temp_maxExp = gm.Max_Exp;
+        int temp_curExp = gm.Cur_Exp;
+        bool isLevelUp =  gm.GetExp(exp);
+        if (isLevelUp)
+        {
+            DOTween.To(() => EXP_Bar.fillAmount, x => EXP_Bar.fillAmount = x, 1, 1f).OnComplete(Levelup);
+            int expnum = temp_curExp;
+            DOTween.To(() => expnum, x => expnum = x, temp_maxExp, 1f)
+                .OnUpdate(() => EXP_Text.text = expnum + "/" + temp_maxExp)
+                .OnComplete(() => EXP_Text.text = temp_maxExp + "/" + temp_maxExp);
+        }
+        else
+        {
+            DOTween.To(() => EXP_Bar.fillAmount, x => EXP_Bar.fillAmount = x, gm.Cur_Exp / gm.Max_Exp, 1f);
+        }
+    }
+
+    void Levelup()
+    {
+        InGameManager gm = GetComponent<InGameManager>();
+        Lv_Text.text = "Lv." + gm.Lv;
+        Lv_Text.transform.DOPunchScale(new Vector3(1.2f, 1.2f, 1.2f), 0.5f, 1, 0);
+        DOTween.To(() => EXP_Bar.fillAmount, x => EXP_Bar.fillAmount = x, gm.Cur_Exp / gm.Max_Exp, 1f);
+        int expnum = 0;
+        DOTween.To(() => expnum, x => expnum = x, gm.Cur_Exp, 1f)
+            .OnUpdate(() => EXP_Text.text = expnum + "/" + gm.Max_Exp)
+            .OnComplete(() => EXP_Text.text = gm.Cur_Exp + "/" + gm.Max_Exp);
+    }
+    
     public void startNextTurn(int turn) // 이건 유닛이 공격을 마치고 다음 턴 하라고 실행해줄꺼임.
     {
         if (enemyUnits.Count == 0 || myUnits.Count == 0)
@@ -250,6 +283,7 @@ public class BattleManager : MonoBehaviour
                 RoundIcon.DOFade(0, 0.5f);
                 RoundText.DOFade(0, 0.5f);
                 Invoke("SetWinPanel", 2f);
+                DOVirtual.DelayedCall(3.0f, () => ExpUp(2));
             }
             return;
         }

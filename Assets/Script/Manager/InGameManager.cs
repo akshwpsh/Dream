@@ -62,5 +62,19 @@ public class InGameManager : MonoBehaviour
         TextBox_text.DOFade(0, 0.5f);
     }
 
+    public bool GetExp(int exp)
+    {
+        Cur_Exp += exp;
+        if (Cur_Exp >= Max_Exp)
+        {
+            Lv++;
+            Cur_Exp -= Max_Exp;
+            Max_Exp = Lv * 2;
+            return true;
+        }
+
+        return false;
+    }
+
     
 }
