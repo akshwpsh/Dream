@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -43,6 +44,10 @@ public class BattleManager : MonoBehaviour
     public TMP_Text Lv_Text;
     public TMP_Text EXP_Text;
     
+    //패배창
+    public GameObject DefeatPanel;
+    public TMP_Text DefeatText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -222,6 +227,14 @@ public class BattleManager : MonoBehaviour
         Debug.Log("List contents: " + string.Join(",", allUnits));
     }
 
+    void SetDefeatPanel()
+    {
+        DefeatPanel.SetActive(true);
+        DefeatText.GetComponent<TextAni>().SetText("나는 급하게 도망쳤다. \n 얼마 되지 않아 시야가 흐려졌다.");
+        DOVirtual.DelayedCall(2.0f, () => SceneManager.LoadScene(0));
+
+    }
+    
     void SetWinPanel()
     {
         InGameManager gm = GetComponent<InGameManager>();
@@ -284,6 +297,19 @@ public class BattleManager : MonoBehaviour
                 RoundText.DOFade(0, 0.5f);
                 Invoke("SetWinPanel", 2f);
                 DOVirtual.DelayedCall(3.0f, () => ExpUp(2));
+            }
+
+            if (myUnits.Count == 0)
+            {
+                UnitManager um = GetComponent<UnitManager>();
+                foreach (var unitObject in um.EnemyUnitObjects)
+                {
+                    unitObject.transform.DOMove(new Vector2(unitObject.transform.position.x, 10), 0.5f).SetDelay(1f);
+                }
+
+                RoundIcon.DOFade(0, 0.5f);
+                RoundText.DOFade(0, 0.5f);
+                Invoke("SetDefeatPanel", 1f);
             }
             return;
         }
