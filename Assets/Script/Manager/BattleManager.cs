@@ -146,8 +146,8 @@ public class BattleManager : MonoBehaviour
     public void SetEnemy()
     {
         GetComponent<UnitManager>().EnemyUnitList.Clear();
-        //GetComponent<UnitManager>().AddUnit(false, "어비스", 0, 20, 30, 0, 0,30, 10);
-        //GetComponent<UnitManager>().AddUnit(false, "장웅",10,0,70, 0, 0,10, 10);
+        GetComponent<UnitManager>().AddUnit(false, "어비스", 0, 20, 30, 0, 0,30, 10);
+        GetComponent<UnitManager>().AddUnit(false, "장웅",10,0,70, 0, 0,10, 10);
         GetComponent<UnitManager>().AddUnit(false, "양",20,0,50, 0, 0,10, 10); //임시로 3마리 그냥 넣어둠. 이제 랜덤으로 들어가게 해야겠죠? 넹
 
     }
@@ -231,7 +231,7 @@ public class BattleManager : MonoBehaviour
     {
         DefeatPanel.SetActive(true);
         DefeatText.GetComponent<TextAni>().SetText("나는 급하게 도망쳤다. \n 얼마 되지 않아 시야가 흐려졌다.");
-        DOVirtual.DelayedCall(2.0f, () => SceneManager.LoadScene(0));
+        DOVirtual.DelayedCall(5.0f, () => SceneManager.LoadScene(0));
 
     }
     
@@ -415,6 +415,21 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    public void SetHeal(int healAmount, Unit target)
+    {
+        if (target.Cur_Hp + healAmount > target.Max_Hp)
+        {
+            target.Cur_Hp = target.Max_Hp;
+        }
+        else
+        {
+            target.Cur_Hp += healAmount;
+        }
+        
+        target.SetText();
+        GameObject popup = Instantiate(DamagePopup, target.transform.position, Quaternion.identity);
+        popup.GetComponent<DamagePopup>().SetHeal(healAmount);
+    }
     public void PopupTurn()
     {
         TurnText.text = Cur_turn.ToString();

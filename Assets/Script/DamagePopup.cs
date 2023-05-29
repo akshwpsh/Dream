@@ -38,6 +38,11 @@ public class DamagePopup : MonoBehaviour
             damageText.text = "-"+damageAmount.ToString();
     }
 
+    public void SetHeal(int healAmount)
+    {
+        damageText.color = Color.green;
+        damageText.text = "+" + healAmount.ToString();
+    }
     public void PlayAnimation()
     {
         transform.localScale = Vector3.zero;

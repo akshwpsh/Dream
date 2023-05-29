@@ -20,4 +20,10 @@ public class EffectManager : MonoBehaviour
         GameObject hitEffect = Instantiate(effects[1], position, Quaternion.identity);
         Destroy(hitEffect, 2.0f); // Destroy the hit effect after 1 second
     }
+
+    public void CreateHealEffect(Vector3 position)
+    {
+        GameObject healEffect = Instantiate(effects[2], position, Quaternion.identity);
+        Destroy(healEffect, 2.0f);
+    }
 }

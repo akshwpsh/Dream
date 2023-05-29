@@ -750,6 +750,8 @@ MonoBehaviour:
   Cur_Hp: 0
   Max_Mp: 0
   Cur_Mp: 0
+  Evasion: 0
+  Critical: 0
   Shield: 0
   Count: 
   Shakeduration: 0.5
@@ -767,6 +769,9 @@ MonoBehaviour:
   UM: {fileID: 0}
   isMyAtk: 0
   isDie: 0
+  info: "(\uC989\uC2DC\uBC1C\uB3D9)\n\uCCB4\uB825\uC774 \uAC00\uC7A5 \uB0AE\uC740
+    \uC544\uAD70\uC744 \n\uC774 \uC720\uB2DB \uCD5C\uB300 \uCCB4\uB825\uC758 20%\uB9CC\uD07C
+    \n\uD68C\uBCF5\uC2DC\uD0B5\uB2C8\uB2E4."
 --- !u!114 &3590501709073662800
 MonoBehaviour:
   m_ObjectHideFlags: 0

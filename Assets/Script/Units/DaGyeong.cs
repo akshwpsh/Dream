@@ -128,9 +128,34 @@ public class DaGyeong : MonoBehaviour
                                     }
                                 }
                                 
-                                unit.BM.startNextTurn(unit.Count[i] + 1);
                                 if (unit.Cur_Mp < unit.Max_Mp)
                                     unit.Cur_Mp++;
+                                if (unit.Cur_Mp == unit.Max_Mp)
+                                {
+                                    bool isneedheal = false;
+                                    foreach (var myunit in unit.BM.myUnits)
+                                    {
+                                        if (myunit.Cur_Hp < myunit.Max_Hp)
+                                        {
+                                            isneedheal = true;
+                                        }
+                                    }
+
+                                    if (isneedheal)
+                                    {
+                                        DOVirtual.DelayedCall(1f, SkillHeal);
+                                        DOVirtual.DelayedCall(1f, () => unit.BM.startNextTurn(unit.Count[i] + 1));
+                                    }
+                                    else
+                                    {
+                                        unit.BM.startNextTurn(unit.Count[i] + 1);
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    unit.BM.startNextTurn(unit.Count[i] + 1);
+                                }
                                 unit.SetText();
                                 DOVirtual.DelayedCall(1.0f, ()=> unit.disableMyAtk());
                                 break;
@@ -141,5 +166,31 @@ public class DaGyeong : MonoBehaviour
             }
             
         }
+    }
+
+    void SkillHeal()
+    {
+        Unit target = unit.BM.myUnits[0];
+        foreach (var targetunit in unit.BM.myUnits)
+        {
+            if (targetunit.Cur_Hp < target.Cur_Hp)
+            {
+                target = targetunit;
+            }
+
+            if (targetunit.Cur_Hp == target.Cur_Hp)//hp가 같을경우 랜덤으로 지정.
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    target = targetunit;
+                }
+            }
+        }
+        
+        unit.BM.SetHeal((int)(unit.Max_Hp * 0.2f), target);
+        unit.EM.CreateHealEffect(target.transform.position);
+
+        unit.Cur_Mp = 0;
+        unit.SetText();
     }
 }

@@ -31,8 +31,8 @@ public class UnitManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AddUnit(true, "다경", 100, 0, 80, 3, 0, 10, 10); // 일단 아군 유닛은 그냥 시작할때 임의로 설정해둠.
-        AddUnit(true, "샤인", 100, 0, 100, 2, 0, 10, 10); //이친구는 공30에 체력 70인 캐릭.
+        AddUnit(true, "다경", 5, 0, 100, 2, 0, 10, 10); // 일단 아군 유닛은 그냥 시작할때 임의로 설정해둠.
+        AddUnit(true, "샤인", 20, 0, 80, 2, 0, 10, 10); //이친구는 공30에 체력 70인 캐릭.
 
         //SpawnUnits();
     }
